@@ -9,10 +9,12 @@ import br.com.trier.projetospring.services.ChampionshipService;
 import br.com.trier.projetospring.services.CountryService;
 import br.com.trier.projetospring.services.MatchService;
 import br.com.trier.projetospring.services.NationalTeamService;
+import br.com.trier.projetospring.services.RefereeService;
 import br.com.trier.projetospring.services.impl.ChampionshipServiceImpl;
 import br.com.trier.projetospring.services.impl.CountryServiceImpl;
 import br.com.trier.projetospring.services.impl.MatchServiceImpl;
 import br.com.trier.projetospring.services.impl.NationalTeamServiceImpl;
+import br.com.trier.projetospring.services.impl.RefereeServiceImpl;
 
 @TestConfiguration
 @SpringBootTest
@@ -37,5 +39,10 @@ public class BaseTests {
 	@Bean
 	public MatchService matchService() {
 		return new MatchServiceImpl();
+	}
+	
+	@Bean
+	public RefereeService refereeService() {
+		return new RefereeServiceImpl();
 	}
 }

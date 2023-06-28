@@ -9,8 +9,8 @@ import br.com.trier.projetospring.domain.Match;
 
 public interface MatchService {
 	
-	Match save(Match country);
-	Match update(Match country);
+	Match save(Match match);
+	Match update(Match match);
 	void delete (Integer id);
 	Match findById(Integer id);
 	List<Match> listAll();

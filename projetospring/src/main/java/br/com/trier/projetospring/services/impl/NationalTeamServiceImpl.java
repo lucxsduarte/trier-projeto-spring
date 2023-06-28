@@ -96,5 +96,7 @@ public class NationalTeamServiceImpl implements NationalTeamService{
 			throw new IntegrityViolation("Seleçao já cadastrada: %s".formatted(nationalTeam.getName()));
 		}
 	}
+	
+
 
 }

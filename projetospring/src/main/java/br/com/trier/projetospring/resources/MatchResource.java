@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.trier.projetospring.domain.Match;
+import br.com.trier.projetospring.domain.dto.MatchDTO;
 import br.com.trier.projetospring.services.ChampionshipService;
 import br.com.trier.projetospring.services.CountryService;
 import br.com.trier.projetospring.services.MatchService;
@@ -31,14 +32,22 @@ public class MatchResource {
 	private ChampionshipService championshipService;
 	
 	@PostMapping
-	public ResponseEntity<Match> insert(@RequestBody Match match){
-		return ResponseEntity.ok(service.save(match));
+	public ResponseEntity<MatchDTO> insert(@RequestBody MatchDTO matchDTO){
+		return ResponseEntity.ok(service.save(new Match(
+				matchDTO,
+				countryService.findById(matchDTO.getCountry_id()),
+				championshipService.findById(matchDTO.getChampionship_id())))
+				.toDTO());
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Match> update(@PathVariable Integer id, @RequestBody Match match){
+	public ResponseEntity<MatchDTO> update(@PathVariable Integer id, @RequestBody MatchDTO matchDTO){
+		Match match = new Match(
+				matchDTO,
+				countryService.findById(matchDTO.getCountry_id()),
+				championshipService.findById(matchDTO.getChampionship_id()));
 		match.setId(id);
-		return ResponseEntity.ok(service.update(match));
+		return ResponseEntity.ok(service.update(match).toDTO());
 	}
 	
 	@DeleteMapping("/{id}")
@@ -48,47 +57,55 @@ public class MatchResource {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Match> findById(@PathVariable Integer id){
-		return ResponseEntity.ok(service.findById(id));
+	public ResponseEntity<MatchDTO> findById(@PathVariable Integer id){
+		return ResponseEntity.ok(service.findById(id).toDTO());
 	}
 	
 	@GetMapping
-	public ResponseEntity<List<Match>> listAll(){
-		return ResponseEntity.ok(service.listAll());
+	public ResponseEntity<List<MatchDTO>> listAll(){
+		return ResponseEntity.ok(service.listAll()
+				.stream().map(match -> match.toDTO()).toList());
 	}
 	
 	@GetMapping("/date/{id}")
-	public ResponseEntity<List<Match>> findByDate(@PathVariable String date){
-		return ResponseEntity.ok(service.findByDate(DateUtils.strToZonedDateTime(date)));
+	public ResponseEntity<List<MatchDTO>> findByDate(@PathVariable String date){
+		return ResponseEntity.ok(service.findByDate(DateUtils.strToZonedDateTime(date))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/date/between/{initialDate}/{finalDate}")
-	public ResponseEntity<List<Match>> findByDateBetween(@PathVariable String initialDate, @PathVariable String finalDate){
-		return ResponseEntity.ok(service.findByDateBetween(DateUtils.strToZonedDateTime(initialDate), DateUtils.strToZonedDateTime(finalDate)));
+	public ResponseEntity<List<MatchDTO>> findByDateBetween(@PathVariable String initialDate, @PathVariable String finalDate){
+		return ResponseEntity.ok(service.findByDateBetween(DateUtils.strToZonedDateTime(initialDate), DateUtils.strToZonedDateTime(finalDate))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/country/{country_id}")
-	public ResponseEntity<List<Match>> findByCountry(@PathVariable Integer country_id){
-		return ResponseEntity.ok(service.findByCountry(countryService.findById(country_id)));
+	public ResponseEntity<List<MatchDTO>> findByCountry(@PathVariable Integer country_id){
+		return ResponseEntity.ok(service.findByCountry(countryService.findById(country_id))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/championship/{championship_id}")
-	public ResponseEntity<List<Match>> findByChampionship(@PathVariable Integer championship_id){
-		return ResponseEntity.ok(service.findByChampionship(championshipService.findById(championship_id)));
+	public ResponseEntity<List<MatchDTO>> findByChampionship(@PathVariable Integer championship_id){
+		return ResponseEntity.ok(service.findByChampionship(championshipService.findById(championship_id))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/championship/country/{championship_id}/{country_id}")
-	public ResponseEntity<List<Match>> findByChampionshipAndCountry(@PathVariable Integer championship_id, @PathVariable Integer country_id){
-		return ResponseEntity.ok(service.findByChampionshipAndCountry(championshipService.findById(championship_id), countryService.findById(country_id)));
+	public ResponseEntity<List<MatchDTO>> findByChampionshipAndCountry(@PathVariable Integer championship_id, @PathVariable Integer country_id){
+		return ResponseEntity.ok(service.findByChampionshipAndCountry(championshipService.findById(championship_id), countryService.findById(country_id))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/date/country/{date}/{country_id}")
-	public ResponseEntity<List<Match>> findByDateAndCountry(@PathVariable String date, @PathVariable Integer country_id){
-		return ResponseEntity.ok(service.findByDateAndCountry(DateUtils.strToZonedDateTime(date), countryService.findById(country_id)));
+	public ResponseEntity<List<MatchDTO>> findByDateAndCountry(@PathVariable String date, @PathVariable Integer country_id){
+		return ResponseEntity.ok(service.findByDateAndCountry(DateUtils.strToZonedDateTime(date), countryService.findById(country_id))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 	
 	@GetMapping("/date/championship/{date}/{championship_id}")
-	public ResponseEntity<List<Match>> findByDateAndChampionship(@PathVariable String date, @PathVariable Integer championship_id){
-		return ResponseEntity.ok(service.findByDateAndChampionship(DateUtils.strToZonedDateTime(date), championshipService.findById(championship_id)));
+	public ResponseEntity<List<MatchDTO>> findByDateAndChampionship(@PathVariable String date, @PathVariable Integer championship_id){
+		return ResponseEntity.ok(service.findByDateAndChampionship(DateUtils.strToZonedDateTime(date), championshipService.findById(championship_id))
+				.stream().map(corrida -> corrida.toDTO()).toList());
 	}
 }
