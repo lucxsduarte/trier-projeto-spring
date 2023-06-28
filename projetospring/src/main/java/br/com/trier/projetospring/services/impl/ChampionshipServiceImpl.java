@@ -64,8 +64,8 @@ public class ChampionshipServiceImpl implements ChampionshipService{
 	}
 
 	@Override
-	public List<Championship> findByNameContains(String name) {
-		List<Championship> list = repository.findByNameContains(name);
+	public List<Championship> findByNameContainsIgnoreCase(String name) {
+		List<Championship> list = repository.findByNameContainsIgnoreCase(name);
 		if(list.size() == 0) {
 			throw new ObjectNotFound("Nenhum campeonato cadastrado contem o nome: %s!".formatted(name));
 		}
@@ -73,8 +73,8 @@ public class ChampionshipServiceImpl implements ChampionshipService{
 	}
 
 	@Override
-	public List<Championship> findByNameStartsWith(String name) {
-		List<Championship> list = repository.findByNameStartsWith(name);
+	public List<Championship> findByNameStartsWithIgnoreCase(String name) {
+		List<Championship> list = repository.findByNameStartsWithIgnoreCase(name);
 		if(list.size() == 0) {
 			throw new ObjectNotFound("Nenhum campeonato cadastrado começa com o nome: %s!".formatted(name));
 		}

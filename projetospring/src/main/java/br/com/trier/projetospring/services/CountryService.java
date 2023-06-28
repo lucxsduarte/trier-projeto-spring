@@ -12,6 +12,6 @@ public interface CountryService {
 	Country findById(Integer id);
 	List<Country> listAll();
 	List<Country> findByNameIgnoreCase(String name);
-	List<Country> findByNameContains(String name);
-	List<Country> findByNameStartsWith(String name);
+	List<Country> findByNameContainsIgnoreCase(String name);
+	List<Country> findByNameStartsWithIgnoreCase(String name);
 }

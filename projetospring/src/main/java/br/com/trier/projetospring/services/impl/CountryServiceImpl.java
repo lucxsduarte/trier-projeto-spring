@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import br.com.trier.projetospring.domain.Country;
 import br.com.trier.projetospring.repositories.CountryRepository;
 import br.com.trier.projetospring.services.CountryService;
+import br.com.trier.projetospring.services.exceptions.IntegrityViolation;
 import br.com.trier.projetospring.services.exceptions.ObjectNotFound;
 
 @Service
@@ -61,8 +62,8 @@ public class CountryServiceImpl implements CountryService{
 	}
 
 	@Override
-	public List<Country> findByNameContains(String name) {
-		List<Country> list = repository.findByNameIgnoreCase(name);
+	public List<Country> findByNameContainsIgnoreCase(String name) {
+		List<Country> list = repository.findByNameContainsIgnoreCase(name);
 		if ( list.size() == 0) {
 			throw new ObjectNotFound("Nenhum país cadastrado contem: %s".formatted(name));
 		}
@@ -70,18 +71,18 @@ public class CountryServiceImpl implements CountryService{
 	}
 
 	@Override
-	public List<Country> findByNameStartsWith(String name) {
-		List<Country> list = repository.findByNameIgnoreCase(name);
+	public List<Country> findByNameStartsWithIgnoreCase(String name) {
+		List<Country> list = repository.findByNameStartsWithIgnoreCase(name);
 		if ( list.size() == 0) {
 			throw new ObjectNotFound("Nenhum país cadastrado começa com: %s".formatted(name));
 		}
 		return list;
 	}
 	
-	public void findByName(Country country) {
+	private void findByName(Country country) {
 		Country newCountry = repository.findByName(country.getName());
 		if (newCountry != null && newCountry.getId() != country.getId()) {
-			throw new ObjectNotFound("País já cadastrado: %s".formatted(country.getName()));
+			throw new IntegrityViolation("País já cadastrado: %s".formatted(country.getName()));
 		}
 			
 	}

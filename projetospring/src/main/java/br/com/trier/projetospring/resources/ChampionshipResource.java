@@ -57,12 +57,12 @@ public class ChampionshipResource {
 	
 	@GetMapping("/name/contains/{name}")
 	public ResponseEntity<List<Championship>> findByNameContains(@PathVariable String name){
-		return ResponseEntity.ok(service.findByNameContains(name));
+		return ResponseEntity.ok(service.findByNameContainsIgnoreCase(name));
 	}
 	
 	@GetMapping("/name/starts/{name}")
 	public ResponseEntity<List<Championship>> findByNameStarts(@PathVariable String name){
-		return ResponseEntity.ok(service.findByNameStartsWith(name));
+		return ResponseEntity.ok(service.findByNameStartsWithIgnoreCase(name));
 	}
 	
 	@GetMapping("/year/{year}")

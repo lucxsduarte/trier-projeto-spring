@@ -26,7 +26,7 @@ public class NationalTeam {
 	@Setter
 	private Integer id;
 	
-	@Column(name = "national_team_name")
+	@Column(name = "national_team_name", unique = true)
 	private String name;
 	
 	@ManyToOne

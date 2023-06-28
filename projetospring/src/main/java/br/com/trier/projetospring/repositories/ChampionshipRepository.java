@@ -11,8 +11,8 @@ import br.com.trier.projetospring.domain.Championship;
 public interface ChampionshipRepository extends JpaRepository<Championship, Integer>{
 
 	List<Championship> findByNameIgnoreCase(String name);
-	List<Championship> findByNameContains(String name);
-	List<Championship> findByNameStartsWith(String name);
+	List<Championship> findByNameContainsIgnoreCase(String name);
+	List<Championship> findByNameStartsWithIgnoreCase(String name);
 	List<Championship> findByYear(Integer year);
 	List<Championship> findByYearAndName(Integer year, String name);
 	List<Championship> findByYearBetween(Integer initialYear, Integer finalYear);
