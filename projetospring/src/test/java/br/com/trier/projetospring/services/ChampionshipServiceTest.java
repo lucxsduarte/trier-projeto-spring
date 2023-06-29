@@ -65,7 +65,7 @@ public class ChampionshipServiceTest extends BaseTests{
 	void deleteTest() {
 		championshipService.delete(1);
  		var list = championshipService.listAll();
-		assertEquals(2, list.size());
+		assertEquals(3, list.size());
 	}
 	
 	@Test
@@ -80,7 +80,7 @@ public class ChampionshipServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void listAllTest() {
 		var list = championshipService.listAll();
-		assertEquals(3, list.size());
+		assertEquals(4, list.size());
 	}
 	
 	@Test
@@ -111,7 +111,7 @@ public class ChampionshipServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByNameTest() {
 		var list = championshipService.findByNameIgnoreCase("COPA DO MUNDO");
-		assertEquals(3, list.size());
+		assertEquals(4, list.size());
 	}
 	
 	@Test
@@ -127,7 +127,7 @@ public class ChampionshipServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByNameContainsTest() {
 		var list = championshipService.findByNameContainsIgnoreCase("MUNDO");
-		assertEquals(3, list.size());
+		assertEquals(4, list.size());
 	}
 	
 	@Test
@@ -143,7 +143,7 @@ public class ChampionshipServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByNameStartsWithTest() {
 		var list = championshipService.findByNameStartsWithIgnoreCase("CO");
-		assertEquals(3, list.size());
+		assertEquals(4, list.size());
 	}
 	
 	@Test
@@ -198,8 +198,8 @@ public class ChampionshipServiceTest extends BaseTests{
 	@DisplayName("Teste buscar campeonato entre dois anos vazio")
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByYearBetweenErrorTest() {
-		var exception = assertThrows(ObjectNotFound.class, () -> championshipService.findByYearBetween(2025, 2036));
-		assertEquals("Nenhum campeonato cadastrado entre os anos de: 2025 e 2036!", exception.getMessage());
+		var exception = assertThrows(ObjectNotFound.class, () -> championshipService.findByYearBetween(2027, 2036));
+		assertEquals("Nenhum campeonato cadastrado entre os anos de: 2027 e 2036!", exception.getMessage());
 	}
 	
 	@Test
@@ -207,15 +207,15 @@ public class ChampionshipServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByYearGreaterThanEqualTest() {
 		var list = championshipService.findByYearGreaterThanEqual(2017);
-		assertEquals(2, list.size());
+		assertEquals(3, list.size());
 	}
 	
 	@Test
 	@DisplayName("Teste buscar campeonato por ano maior ou igual vazio")
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	void findByYearGreaterThanEqualErrorTest() {
-		var exception = assertThrows(ObjectNotFound.class, () -> championshipService.findByYearGreaterThanEqual(2023));
-		assertEquals("Nenhum campeonato cadastrado após o ano de: 2023!", exception.getMessage());
+		var exception = assertThrows(ObjectNotFound.class, () -> championshipService.findByYearGreaterThanEqual(2027));
+		assertEquals("Nenhum campeonato cadastrado após o ano de: 2027!", exception.getMessage());
 	}
 	
 	@Test

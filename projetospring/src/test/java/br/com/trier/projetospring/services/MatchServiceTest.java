@@ -96,7 +96,7 @@ public class MatchServiceTest extends BaseTests{
 	void deleteTest() {
 		matchService.delete(1);
 		var list = matchService.listAll();
-		assertEquals(1, list.size());
+		assertEquals(2, list.size());
 	}
 	
 	@Test
@@ -115,7 +115,7 @@ public class MatchServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/match.sql"})
 	void listAllTest() {
 		var list = matchService.listAll();
-		assertEquals(2, list.size());
+		assertEquals(3, list.size());
 	}
 	
 	@Test
@@ -203,8 +203,8 @@ public class MatchServiceTest extends BaseTests{
 	@Sql({"classpath:/resources/sqls/championship.sql"})
 	@Sql({"classpath:/resources/sqls/match.sql"})
 	void findByChampionshipErrorTest() {
-		var exception = assertThrows(ObjectNotFound.class, () -> matchService.findByChampionship(championshipService.findById(3)));
-		assertEquals("Nenhuma partida cadastrada no campeonato: 3", exception.getMessage());	
+		var exception = assertThrows(ObjectNotFound.class, () -> matchService.findByChampionship(championshipService.findById(4)));
+		assertEquals("Nenhuma partida cadastrada no campeonato: 4", exception.getMessage());	
 	}
 	
 	@Test

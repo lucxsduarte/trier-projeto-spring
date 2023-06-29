@@ -43,10 +43,16 @@ public class Match {
 	}
 	
 	public Match(MatchDTO dto) {
-		this(dto.getId(), DateUtils.strToZonedDateTime(dto.getDate()), new Country(dto.getCountry_id(), null), new Championship(dto.getChampionship_id(), null, null));
+		this(dto.getId(), 
+				DateUtils.strToZonedDateTime(dto.getDate()), 
+				new Country(dto.getCountry_id(), null), 
+				new Championship(dto.getChampionship_id(), null, null));
 	}
 	
 	public Match(MatchDTO dto, Country country, Championship championship) {
-		this(dto.getId(), DateUtils.strToZonedDateTime(dto.getDate()), country, championship);
+		this(dto.getId(), 
+				DateUtils.strToZonedDateTime(dto.getDate()), 
+				country, 
+				championship);
 	}
 }

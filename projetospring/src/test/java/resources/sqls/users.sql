@@ -1,0 +1,3 @@
+insert into users(user_id, user_name, user_email, user_password, user_roles) values (3, 'Lucas', 'lucas@gmail.com', '123', 'ADMIN,USER');
+insert into users(user_id, user_name, user_email, user_password, user_roles) values (4, 'Joao', 'joao@gmail.com', '123', 'USER');
+insert into users(user_id, user_name, user_email, user_password, user_roles) values (5, 'Marcelo', 'marcelo@gmail.com', '123', 'USER');

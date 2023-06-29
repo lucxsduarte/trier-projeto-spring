@@ -33,7 +33,6 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	@Override
 	public MatchStatus update(MatchStatus match_status) {
 		findById(match_status.getId());
-		validateMatch(match_status);
 		validateTeams(match_status);
 		validateReferee(match_status);
 		validateWinner(match_status);
@@ -50,7 +49,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 
 	@Override
 	public MatchStatus findById(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Status da partida %S não encontrado".formatted(id)));
+		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Status da partida %s não encontrado".formatted(id)));
 	}
 
 	@Override
@@ -120,7 +119,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	public List<MatchStatus> findByHomeScore(Integer homeScore) {
 		List<MatchStatus> list = repository.findByHomeScore(homeScore);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção de casa marcou %s gols".formatted(homeScore));
+			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção de casa marcou %s gol(s)".formatted(homeScore));
 		}
 		return list;
 	}
@@ -129,7 +128,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	public List<MatchStatus> findByAwayScore(Integer awayScore) {
 		List<MatchStatus> list = repository.findByAwayScore(awayScore);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção visitante marcou %s gols".formatted(awayScore));
+			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção visitante marcou %s gol(s)".formatted(awayScore));
 		}
 		return list;
 	}
@@ -138,7 +137,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	public List<MatchStatus> findByHomeScoreAndAwayScore(Integer homeScore, Integer awayScore) {
 		List<MatchStatus> list = repository.findByHomeScoreAndAwayScore(homeScore, awayScore);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção de casa marcou %s gols e a seleção visitante marcou marcou %s gols".formatted(homeScore, awayScore));
+			throw new ObjectNotFound("Nenhum status de partida cadastrado onde a seleção de casa marcou %s gol(s) e a seleção visitante marcou marcou %s gol(s)".formatted(homeScore, awayScore));
 		}
 		return list;
 	}
@@ -147,7 +146,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	public List<MatchStatus> findByHomeTeamAndHomeScore(NationalTeam nationalTeam, Integer homeScore) {
 		List<MatchStatus> list = repository.findByHomeTeamAndHomeScore(nationalTeam, homeScore);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum status de partida cadastrado para a seleção %s jogando em casa e marcando %s gols".formatted(nationalTeam.getId(), homeScore));
+			throw new ObjectNotFound("Nenhum status de partida cadastrado para a seleção %s jogando em casa e marcando %s gol(s)".formatted(nationalTeam.getId(), homeScore));
 		}
 		return list;
 	}
@@ -156,7 +155,7 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 	public List<MatchStatus> findByAwayTeamAndAwayScore(NationalTeam nationalTeam, Integer awayScore) {
 		List<MatchStatus> list = repository.findByAwayTeamAndAwayScore(nationalTeam, awayScore);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum status de partida cadastrado para a seleção %s jogando fora de casa e marcando %s gols".formatted(nationalTeam.getId(), awayScore));
+			throw new ObjectNotFound("Nenhum status de partida cadastrado para a seleção %s jogando fora de casa e marcando %s gol(s)".formatted(nationalTeam.getId(), awayScore));
 		}
 		return list;
 	}
@@ -188,10 +187,9 @@ public class MatchStatusServiceImpl implements MatchStatusService{
 		}
 	}
 	
-	
 	private void validateScore(MatchStatus matchStatus) {
 		if(matchStatus.getHomeScore() < 0 || matchStatus.getAwayScore() < 0 ) {
-			throw new IntegrityViolation("Quantidade de gols inválida");
+			throw new IntegrityViolation("Quantidade de gols não pode ser menor que 0");
 		}
 	}
 }

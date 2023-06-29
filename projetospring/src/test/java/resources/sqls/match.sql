@@ -1,2 +1,3 @@
 insert into match(match_id, match_date, country_country_id, championship_championship_id) values (1,'2014-07-20T10:30:00-03:00', 1, 1);
 insert into match(match_id, match_date, country_country_id, championship_championship_id) values (2,'2018-07-20T10:30:00-03:00', 1, 2);
+insert into match(match_id, match_date, country_country_id, championship_championship_id) values (3,'2022-07-20T10:30:00-03:00', 2, 3);

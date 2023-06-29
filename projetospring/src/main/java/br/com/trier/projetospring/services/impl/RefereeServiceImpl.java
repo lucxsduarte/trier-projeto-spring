@@ -40,7 +40,7 @@ public class RefereeServiceImpl implements RefereeService {
 
 	@Override
 	public Referee findById(Integer id) {
-		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Árbitro %S não encontrada".formatted(id)));
+		return repository.findById(id).orElseThrow(() -> new ObjectNotFound("Árbitro %s não encontrado".formatted(id)));
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class RefereeServiceImpl implements RefereeService {
 	public List<Referee> findByCountry(Country country) {
 		List<Referee> list = repository.findByCountry(country);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum árbitro cadastrado no país: %s".formatted(country));
+			throw new ObjectNotFound("Nenhum árbitro cadastrado do país: %s".formatted(country.getId()));
 		}
 		return list;
 	}
@@ -110,7 +110,7 @@ public class RefereeServiceImpl implements RefereeService {
 	public List<Referee> findByAgeAndCountry(Integer age, Country country) {
 		List<Referee> list = repository.findByAgeAndCountry(age, country);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum árbitro cadastrado com a idade %s e o país %s".formatted(age, country));
+			throw new ObjectNotFound("Nenhum árbitro cadastrado com a idade %s e o país %s".formatted(age, country.getId()));
 		}
 		return list;
 	}
@@ -146,14 +146,14 @@ public class RefereeServiceImpl implements RefereeService {
 	public List<Referee> findByNameAndCountry(String name, Country country) {
 		List<Referee> list = repository.findByNameAndCountry(name, country);
 		if (list.size() == 0) {
-			throw new ObjectNotFound("Nenhum árbitro cadastrado com o nome %s no país %s".formatted(name, country.getName()));
+			throw new ObjectNotFound("Nenhum árbitro cadastrado com o nome %s no país %s".formatted(name, country.getId()));
 		}
 		return list;
 	}
 	
 	private void validateAge(Referee referee) {
 		if (referee.getAge() < 35 || referee.getAge() > 50) {
-			throw new IntegrityViolation("Idade do árbitro fora dos padrões!");
+			throw new IntegrityViolation("O árbitro não pode ter menos que 35 anos ou mais que 50 anos");
 		}
 	}
 
