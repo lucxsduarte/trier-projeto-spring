@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchByCountryAndYearDTO {
+public class AllRefereeSummaryDTO {
 
-	private Integer year;
-	private String country;
-	private List<MatchDTO> matches;
+	private List<RefereeSummaryDTO> referees;
 }

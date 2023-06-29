@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +34,7 @@ public class MatchStatusResource {
 	@Autowired
 	private NationalTeamService nationalTeamService;
 	
+	@Secured({"ROLE_ADMIN"})
 	@PostMapping
 	public ResponseEntity<MatchStatusDTO> insert(@RequestBody MatchStatusDTO matchStatusDTO){
 		return ResponseEntity.ok(service.save(new MatchStatus(
@@ -45,6 +47,7 @@ public class MatchStatusResource {
 				.toDTO());
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@PutMapping("/{id}")
 	public ResponseEntity<MatchStatusDTO> update(@PathVariable Integer id, @RequestBody MatchStatusDTO matchStatusDTO){
 		MatchStatus matchStatus = new MatchStatus(
@@ -58,83 +61,97 @@ public class MatchStatusResource {
 		return ResponseEntity.ok(service.update(matchStatus).toDTO());
 	}
 	
+	@Secured({"ROLE_ADMIN"})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Integer id){
 		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/{id}")
 	public ResponseEntity<MatchStatusDTO> findById(@PathVariable Integer id){
 		return ResponseEntity.ok(service.findById(id).toDTO());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping
 	public ResponseEntity<List<MatchStatusDTO>> listAll(){
 		return ResponseEntity.ok(service.listAll()
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/match/{match_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByMatch(@PathVariable Integer match_id){
 		return ResponseEntity.ok(service.findByMatch(matchService.findById(match_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/referee/{referee_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByReferee(@PathVariable Integer referee_id){
 		return ResponseEntity.ok(service.findByReferee(refereeService.findById(referee_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/match/referee/{match_id}/{referee_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByMatchAndReferee(@PathVariable Integer match_id, @PathVariable Integer referee_id){
 		return ResponseEntity.ok(service.findByMatchAndReferee(matchService.findById(match_id), refereeService.findById(referee_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/homeTeam/{national_team_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByHomeTeam(@PathVariable Integer national_team_id){
 		return ResponseEntity.ok(service.findByHomeTeam(nationalTeamService.findById(national_team_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/awayTeam/{national_team_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByAwayTeam(@PathVariable Integer national_team_id){
 		return ResponseEntity.ok(service.findByAwayTeam(nationalTeamService.findById(national_team_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/winner/{national_team_id}")
 	public ResponseEntity<List<MatchStatusDTO>> findByWinner(@PathVariable Integer national_team_id){
 		return ResponseEntity.ok(service.findByWinner(nationalTeamService.findById(national_team_id))
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/homeScore/{homeScore}")
 	public ResponseEntity<List<MatchStatusDTO>> findByHomeScore(@PathVariable Integer homeScore){
 		return ResponseEntity.ok(service.findByHomeScore(homeScore)
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/awayScore/{awayScore}")
 	public ResponseEntity<List<MatchStatusDTO>> findByAwayScore(@PathVariable Integer awayScore){
 		return ResponseEntity.ok(service.findByAwayScore(awayScore)
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/homeScore/awayScore/{homeScore}/{awayScore}")
 	public ResponseEntity<List<MatchStatusDTO>> findByHomeScoreAndAwayScore(@PathVariable Integer homeScore, @PathVariable Integer awayScore){
 		return ResponseEntity.ok(service.findByHomeScoreAndAwayScore(homeScore, awayScore)
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/homeTeam/homeScore/{national_team_id}/{homeScore}")
 	public ResponseEntity<List<MatchStatusDTO>> findByHomeTeamAndHomeScore(@PathVariable Integer national_team_id, @PathVariable Integer homeScore){
 		return ResponseEntity.ok(service.findByHomeTeamAndHomeScore(nationalTeamService.findById(national_team_id), homeScore)
 				.stream().map(matchStatus -> matchStatus.toDTO()).toList());
 	}
 	
+	@Secured({"ROLE_USER"})
 	@GetMapping("/homeTeam/homeScore/{national_team_id}/{awayScore}")
 	public ResponseEntity<List<MatchStatusDTO>> findByAwayTeamAndAwayScore(@PathVariable Integer national_team_id, @PathVariable Integer awayScore){
 		return ResponseEntity.ok(service.findByAwayTeamAndAwayScore(nationalTeamService.findById(national_team_id), awayScore)

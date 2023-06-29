@@ -1,7 +1,5 @@
 package br.com.trier.projetospring.domain.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchByCountryAndYearDTO {
+public class AllGoalsByChampionshipDTO {
 
-	private Integer year;
-	private String country;
-	private List<MatchDTO> matches;
+	private String championship_name;
+	private Integer championship_matches;
+	private Integer championship_goals;
 }

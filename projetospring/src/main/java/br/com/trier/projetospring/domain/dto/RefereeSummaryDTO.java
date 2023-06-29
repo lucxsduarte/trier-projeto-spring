@@ -1,7 +1,5 @@
 package br.com.trier.projetospring.domain.dto;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchByCountryAndYearDTO {
+public class RefereeSummaryDTO {
 
-	private Integer year;
-	private String country;
-	private List<MatchDTO> matches;
+	private String referee_name;
+	private Integer referee_age;
+	private String referee_country;
+	private Integer referee_matches;
 }
