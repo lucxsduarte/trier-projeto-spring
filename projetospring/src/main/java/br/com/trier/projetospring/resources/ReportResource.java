@@ -1,6 +1,7 @@
 package br.com.trier.projetospring.resources;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,7 @@ import br.com.trier.projetospring.domain.dto.MatchDTO;
 import br.com.trier.projetospring.domain.dto.MatchStatusDTO;
 import br.com.trier.projetospring.domain.dto.RefereeSummaryDTO;
 import br.com.trier.projetospring.domain.dto.AverageWinMatchDTO;
+import br.com.trier.projetospring.domain.dto.ChampionshipByNationalTeamsDTO;
 import br.com.trier.projetospring.services.ChampionshipService;
 import br.com.trier.projetospring.services.CountryService;
 import br.com.trier.projetospring.services.MatchService;
@@ -237,4 +239,31 @@ public class ReportResource {
 	    return ResponseEntity.ok(new AllGoalsByChampionshipDTO(championship.getName(), totalMatches, totalGoals));
 	}
 	
+	@Secured({ "ROLE_USER" })
+	@GetMapping("/championship/nationalteam/{nationalTeam_id}")
+	public ResponseEntity<ChampionshipByNationalTeamsDTO> championshipsByNationalTeams(@PathVariable Integer nationalTeam_id) {
+		NationalTeam nationalTeam = nationalTeamService.findById(nationalTeam_id);
+		List<MatchStatus> matchStatusList = new ArrayList<>();
+		
+		try {
+			List<MatchStatus> homeList = matchStatusService.findByHomeTeam(nationalTeam);
+		    matchStatusList.addAll(homeList);
+		} catch (ObjectNotFound e) {
+			
+		}
+		
+		try {
+			List<MatchStatus> awayList = matchStatusService.findByAwayTeam(nationalTeam);
+		    matchStatusList.addAll(awayList);
+		} catch (ObjectNotFound e) {
+			
+		}
+		
+	    List<Championship> championshipsList = matchStatusList.stream()
+	        .map(matchStatus -> matchStatus.getMatch().getChampionship())
+	        .distinct()
+	        .collect(Collectors.toList());
+	    
+	    return ResponseEntity.ok(new ChampionshipByNationalTeamsDTO(nationalTeam.getName(), championshipsList));
+	}
 }
