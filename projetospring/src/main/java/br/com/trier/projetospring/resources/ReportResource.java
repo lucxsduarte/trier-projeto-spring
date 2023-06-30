@@ -24,6 +24,7 @@ import br.com.trier.projetospring.domain.dto.AllRefereeSummaryDTO;
 import br.com.trier.projetospring.domain.dto.AverageGoalMatchDTO;
 import br.com.trier.projetospring.domain.dto.GoalsCounterDTO;
 import br.com.trier.projetospring.domain.dto.MatchByCountryAndYearDTO;
+import br.com.trier.projetospring.domain.dto.MatchCountDTO;
 import br.com.trier.projetospring.domain.dto.MatchDTO;
 import br.com.trier.projetospring.domain.dto.MatchStatusDTO;
 import br.com.trier.projetospring.domain.dto.RefereeSummaryDTO;
@@ -56,8 +57,8 @@ public class ReportResource {
 
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/match/country/year/{country_id}/{year}")
-	public ResponseEntity<MatchByCountryAndYearDTO> findMatchByCountryYear(@PathVariable Integer country_id,
-			@PathVariable Integer year) {
+	public ResponseEntity<MatchByCountryAndYearDTO> findMatchByCountryYear(@PathVariable Integer country_id, @PathVariable Integer year) {
+		//Recebe um país e um ano, e lista todas as partidas que ocorreram nesse país e nesse ano
 		Country country = countryService.findById(country_id);
 		List<MatchDTO> matchesDTO = matchService.findByCountry(country).stream()
 				.filter(match -> match.getDate().getYear() == year).map(match -> match.toDTO()).toList();
@@ -70,6 +71,7 @@ public class ReportResource {
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/average/win/match/{nationalTeam_id}")
 	public ResponseEntity<AverageWinMatchDTO> averageWinMatch(@PathVariable Integer nationalTeam_id) {
+		//Recebe o ID de uma seleção, mostra um relatório das partidas que ela jogou e também fornece a porcentagem de vitórias
 		NationalTeam nationalTeam = nationalTeamService.findById(nationalTeam_id);
 		Integer winCounter = 0;
 		Integer lossCounter = 0;
@@ -110,6 +112,7 @@ public class ReportResource {
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/goal/counter/{nationalTeam_id}")
 	public ResponseEntity<GoalsCounterDTO> goalsCounter(@PathVariable Integer nationalTeam_id) {
+		//Recebe o ID de uma seleção, mostra o total de gols, e quantos foram jogando em casa ou como visitante
 		Integer totalGoals = 0;
 		Integer homeGoals = 0;
 		Integer awayGoals = 0;
@@ -137,6 +140,7 @@ public class ReportResource {
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/average/goal/match/{nationalTeam_id}")
 	public ResponseEntity<AverageGoalMatchDTO> averageGoalMatch(@PathVariable Integer nationalTeam_id) {
+		//Recebe o ID de uma seleção, mostra quantas partidas essa seleção jogou, gols marcados e também retorna a média de gols por partida
 		Integer totalMatches = 0;
 		Integer homeMatches = 0;
 		Integer awayMatches = 0;
@@ -189,6 +193,7 @@ public class ReportResource {
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/referee/summary/{referee_id}")
 	public ResponseEntity<RefereeSummaryDTO> refereeSummary(@PathVariable Integer referee_id) {
+		//Recebe o ID do árbitro, mostra seus dados e quantas partidas ele já apitou
 		Integer refereeMatches = 0;
 		Referee referee = refereeService.findById(referee_id);
 		try {
@@ -206,6 +211,7 @@ public class ReportResource {
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/referee/summary/all")
 	public ResponseEntity<AllRefereeSummaryDTO> allRefereeSummary() {
+		//Lista o relatório de todos os árbitros
 		List<Referee> allReferees = refereeService.listAll();
 
 		List<RefereeSummaryDTO> refereeSumaries = allReferees.stream().map(referee -> {
@@ -222,48 +228,88 @@ public class ReportResource {
 
 		return ResponseEntity.ok(new AllRefereeSummaryDTO(refereeSumaries));
 	}
-	
+
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/goal/championship/{championship_id}")
 	public ResponseEntity<AllGoalsByChampionshipDTO> allGoalsByChampionship(@PathVariable Integer championship_id) {
+		//Recebe o ID de um campeonato, e mostra quantas partidas e quantos gols ele teve
 		Championship championship = championshipService.findById(championship_id);
-		
+
 		List<Match> matches = matchService.findByChampionship(championship);
-	    int totalMatches = matches.size();
+		int totalMatches = matches.size();
 
-	    int totalGoals = matches.stream()
-	            .flatMap(match -> matchStatusService.findByMatch(match).stream())
-	            .mapToInt(matchStatus -> matchStatus.getHomeScore() + matchStatus.getAwayScore())
-	            .sum();
+		int totalGoals = matches.stream().flatMap(match -> matchStatusService.findByMatch(match).stream())
+				.mapToInt(matchStatus -> matchStatus.getHomeScore() + matchStatus.getAwayScore()).sum();
 
-	    return ResponseEntity.ok(new AllGoalsByChampionshipDTO(championship.getName(), totalMatches, totalGoals));
+		return ResponseEntity.ok(new AllGoalsByChampionshipDTO(championship.getName(), totalMatches, totalGoals));
 	}
-	
+
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/championship/nationalteam/{nationalTeam_id}")
 	public ResponseEntity<ChampionshipByNationalTeamsDTO> championshipsByNationalTeams(@PathVariable Integer nationalTeam_id) {
+		//Recebe o ID de uma seleção e lista os campeonatos que ela participou
 		NationalTeam nationalTeam = nationalTeamService.findById(nationalTeam_id);
 		List<MatchStatus> matchStatusList = new ArrayList<>();
-		
+
 		try {
 			List<MatchStatus> homeList = matchStatusService.findByHomeTeam(nationalTeam);
-		    matchStatusList.addAll(homeList);
+			matchStatusList.addAll(homeList);
 		} catch (ObjectNotFound e) {
-			
+
 		}
-		
+
 		try {
 			List<MatchStatus> awayList = matchStatusService.findByAwayTeam(nationalTeam);
-		    matchStatusList.addAll(awayList);
+			matchStatusList.addAll(awayList);
 		} catch (ObjectNotFound e) {
-			
+
 		}
-		
-	    List<Championship> championshipsList = matchStatusList.stream()
-	        .map(matchStatus -> matchStatus.getMatch().getChampionship())
-	        .distinct()
-	        .collect(Collectors.toList());
+
+		List<Championship> championshipsList = matchStatusList.stream()
+				.map(matchStatus -> matchStatus.getMatch().getChampionship()).distinct().collect(Collectors.toList());
+
+		return ResponseEntity.ok(new ChampionshipByNationalTeamsDTO(nationalTeam.getName(), championshipsList));
+	}
+	
+	@Secured({ "ROLE_USER" })
+	@GetMapping("/match/home/count/{nationalTeam_id}")
+	public ResponseEntity<MatchCountDTO> getMatchCount(@PathVariable Integer nationalTeam_id) {
+		//Recebe o ID de uma seleção, e mostra quantas partidas ela jogou no seu próprio país e fora dele
+	    NationalTeam nationalTeam = nationalTeamService.findById(nationalTeam_id);
+	    Integer ownCountry = 0;
+	    Integer anotherCountry = 0;
+	    try {
+	    	List<MatchStatusDTO> ownHomeList = matchStatusService.findByHomeTeam(nationalTeam).stream()
+					.filter(matchStatus -> matchStatus.getHomeTeam().getCountry().getId() == matchStatus.getMatch().getCountry().getId()).map(MatchStatus::toDTO).toList();
+	    	ownCountry = ownHomeList.size();
+		} catch (Exception e) {
+			ownCountry = 0;
+		}
 	    
-	    return ResponseEntity.ok(new ChampionshipByNationalTeamsDTO(nationalTeam.getName(), championshipsList));
+	    try {
+	    	List<MatchStatusDTO> ownAwayList = matchStatusService.findByAwayTeam(nationalTeam).stream()
+					.filter(matchStatus -> matchStatus.getAwayTeam().getCountry().getId() == matchStatus.getMatch().getCountry().getId()).map(MatchStatus::toDTO).toList();
+	    	ownCountry += ownAwayList.size();
+		} catch (Exception e) {
+			ownCountry += 0;
+		}
+	    
+	    try {
+	    	List<MatchStatusDTO> anotherHomeList = matchStatusService.findByHomeTeam(nationalTeam).stream()
+					.filter(matchStatus -> matchStatus.getHomeTeam().getCountry().getId() != matchStatus.getMatch().getCountry().getId()).map(MatchStatus::toDTO).toList();
+	    	anotherCountry = anotherHomeList.size();
+		} catch (Exception e) {
+			anotherCountry = 0;
+		}
+	    
+	    try {
+	    	List<MatchStatusDTO> anotherAwayList = matchStatusService.findByAwayTeam(nationalTeam).stream()
+					.filter(matchStatus -> matchStatus.getAwayTeam().getCountry().getId() != matchStatus.getMatch().getCountry().getId()).map(MatchStatus::toDTO).toList();
+	    	anotherCountry += anotherAwayList.size();
+		} catch (Exception e) {
+			anotherCountry += 0;
+		}
+	    
+		return ResponseEntity.ok(new MatchCountDTO(nationalTeam.getName(), nationalTeam.getCountry().getName(), ownCountry, anotherCountry));
 	}
 }
