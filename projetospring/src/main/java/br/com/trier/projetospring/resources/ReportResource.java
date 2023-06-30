@@ -54,7 +54,7 @@ public class ReportResource {
 
 	@Secured({ "ROLE_USER" })
 	@GetMapping("/match/country/year/{country_id}/{year}")
-	public ResponseEntity<MatchByCountryAndYearDTO> findMatchbYCountryYear(@PathVariable Integer country_id,
+	public ResponseEntity<MatchByCountryAndYearDTO> findMatchByCountryYear(@PathVariable Integer country_id,
 			@PathVariable Integer year) {
 		Country country = countryService.findById(country_id);
 		List<MatchDTO> matchesDTO = matchService.findByCountry(country).stream()
@@ -236,4 +236,5 @@ public class ReportResource {
 
 	    return ResponseEntity.ok(new AllGoalsByChampionshipDTO(championship.getName(), totalMatches, totalGoals));
 	}
+	
 }

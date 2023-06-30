@@ -18,19 +18,19 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "referee")
 public class Referee {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "referee_id")
 	@Setter
 	private Integer id;
-	
+
 	@Column(name = "referee_name")
 	private String name;
-	
+
 	@Column(name = "referee_age")
 	private Integer age;
-	
+
 	@ManyToOne
 	private Country country;
 }

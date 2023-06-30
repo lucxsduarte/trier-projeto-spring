@@ -15,15 +15,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Entity (name = "country")
+@Entity(name = "country")
 public class Country {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column (name = "country_id")
+	@Column(name = "country_id")
 	@Setter
 	private Integer id;
-	
-	@Column (name = "country_name", unique = true)
+
+	@Column(name = "country_name", unique = true)
 	private String name;
 }

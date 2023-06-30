@@ -22,37 +22,33 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "match")
 public class Match {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "match_id")
 	@Setter
 	private Integer id;
-	
+
 	@Column(name = "match_date")
 	private ZonedDateTime date;
-	
+
 	@ManyToOne
 	private Country country;
-	
+
 	@ManyToOne
 	private Championship championship;
-	
+
 	public MatchDTO toDTO() {
-		return new MatchDTO(id, DateUtils.zoneDateTimeToStr(date), country.getId(), country.getName(), championship.getId(), championship.getName(), championship.getYear());
+		return new MatchDTO(id, DateUtils.zoneDateTimeToStr(date), country.getId(), country.getName(),
+				championship.getId(), championship.getName(), championship.getYear());
 	}
-	
+
 	public Match(MatchDTO dto) {
-		this(dto.getId(), 
-				DateUtils.strToZonedDateTime(dto.getDate()), 
-				new Country(dto.getCountry_id(), null), 
+		this(dto.getId(), DateUtils.strToZonedDateTime(dto.getDate()), new Country(dto.getCountry_id(), null),
 				new Championship(dto.getChampionship_id(), null, null));
 	}
-	
+
 	public Match(MatchDTO dto, Country country, Championship championship) {
-		this(dto.getId(), 
-				DateUtils.strToZonedDateTime(dto.getDate()), 
-				country, 
-				championship);
+		this(dto.getId(), DateUtils.strToZonedDateTime(dto.getDate()), country, championship);
 	}
 }

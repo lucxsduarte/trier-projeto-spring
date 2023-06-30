@@ -77,7 +77,6 @@ public class MatchStatus {
 				awayTeam,
 				winner,
 				dto.getHomeScore(),
-				dto.getAwayScore()
-				);
+				dto.getAwayScore());
 	}
 }

@@ -17,16 +17,16 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "championship")
 public class Championship {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "championship_id")
 	@Setter
 	private Integer id;
-	
+
 	@Column(name = "championship_year")
 	private Integer year;
-	
+
 	@Column(name = "championship_name")
 	private String name;
 }

@@ -15,32 +15,32 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode (of = "id")
-@Entity (name = "users")
+@EqualsAndHashCode(of = "id")
+@Entity(name = "users")
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column (name = "user_id")
+	@Column(name = "user_id")
 	@Setter
 	private Integer id;
-	
-	@Column (name = "user_name")
+
+	@Column(name = "user_name")
 	private String name;
-	
-	@Column (name = "user_email", unique = true)
+
+	@Column(name = "user_email", unique = true)
 	private String email;
-	
-	@Column (name = "user_password")
+
+	@Column(name = "user_password")
 	private String password;
-	
-	@Column (name = "user_roles")
+
+	@Column(name = "user_roles")
 	private String roles;
-	
+
 	public User(UserDTO dto) {
 		this(dto.getId(), dto.getName(), dto.getEmail(), dto.getPassword(), dto.getRoles());
 	}
-	
+
 	public UserDTO toDto() {
 		return new UserDTO(this.id, this.name, this.email, this.password, this.roles);
 	}

@@ -18,16 +18,16 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "id")
 @Entity(name = "national_team")
 public class NationalTeam {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "national_team_id")
 	@Setter
 	private Integer id;
-	
+
 	@Column(name = "national_team_name", unique = true)
 	private String name;
-	
+
 	@ManyToOne
 	private Country country;
 }
